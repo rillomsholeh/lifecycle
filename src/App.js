@@ -1,38 +1,38 @@
-import React from "react";
+import React, { Component } from "react";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      wheather: null
-    };
-  }
+class App extends Component {
+  state = {
+    users: []
+  };
 
-  fetchData() {
+
+  componentDidMount() {
     fetch("https://jsonplaceholder.typicode.com/users")
-      .then((response) => {
-        return response.json();
-      })
-      .then((obj) => {
-        //console.log('javascript object: ', obj)
-        // this.setState({ wheather: obj });
+      .then(res => res.json())
+      .then(users => {
+        this.setState({
+          users
+        });
       });
   }
+
   
-  componentDidMount() {
-    console.log("get api compnents Did Mount");
-    this.fetchData();
-  }
- render() {
+  render() {
     return (
       <div>
-        {this.state.wheather
-          && <div key={this.state.wheather.city_info.name}>{this.state.wheather.city_info.name}</div>
-        }
+        <ul>
+          {this.state.users.map((user, index) => (
+            <li key={index}>
+              <p>Id:{user.id}</p>
+              <p>Nama: ({user.name})</p>
+              <p>userName: {user.username}</p>
+              <p>Email: ({user.email})</p>
+            </li>
+          ))}
+        </ul>
       </div>
-    )
+    );
   }
 }
-
 
 export default App;

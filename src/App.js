@@ -5,7 +5,7 @@ class App extends Component {
     users: []
   };
 
-
+  
   componentDidMount() {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then(res => res.json())

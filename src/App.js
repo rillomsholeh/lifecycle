@@ -31,7 +31,7 @@ class App extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    const url = `https://newsapi.org/v2/everything?q=${this.state.searchTerm}&apiKey=58dbe4aef1424596a06fa3e07d288cec`;
+    const url = `https://newsapi.org/v2/top-headlines?q=${this.state.searchTerm}&apiKey=58dbe4aef1424596a06fa3e07d288cec`;
 
     axios.get(url)
       .then(res => {

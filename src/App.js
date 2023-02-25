@@ -1,39 +1,49 @@
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import React from "react";
 
-const baseURL = "https://jsonplaceholder.typicode.com/posts/1";
+function App() {
+  const [articles, setArticles] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
-export default function App() {
-  const [post, setPost] = React.useState(null);
-
-  React.useEffect(() => {
-    axios.get(baseURL).then((response) => {
-      setPost(response.data);
-    });
+  useEffect(() => {
+    axios
+      .get(
+        `https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=58dbe4aef1424596a06fa3e07d288cec`
+      )
+      .then((res) => {
+        setArticles(res.data.articles);
+      })
   }, []);
 
-  if (!post) return null;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .get(
+        `https://newsapi.org/v2/top-headlines?q=${searchTerm}&apiKey=58dbe4aef1424596a06fa3e07d288cec`
+      )
+      .then((res) => {
+        setArticles(res.data.articles);
+      })
+  };
 
   return (
-    <div>
-        <table border={{style: '0px solid red'}}>
-          <tr>
-              <th>UserId</th>
-              <th>Id</th>
-              <th>Title</th>
-              <th>Body</th>
-          </tr>
-          <tr>
-             <td>{post.userId}</td>
-             <td>{post.id}</td>
-             <td>{post.title}</td>
-             <td>{post.body}</td>
-          </tr>
-          
-        </table>
-
-      {/* <h1>{post.title}</h1>
-      <p>{post.body}</p> */}
+    <div className="container">
+  	<div style={{marginLeft:'980px', marginBottom:'70px', marginTop:'30px'}}>
+      <form className="input-group mb-2 mt-2 search"
+        onSubmit={handleSubmit}>
+        <input className="form-control input" type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+        <button className="btn btn-danger" type="submit">Submit</button>
+      </form>
+    </div>
+      {articles.map((article, id) => (
+        <div className="text-center mt-3" key={id}>
+          <img style={{height:'260px', marginLeft:'400px'}} src={article.urlToImage} alt="news" />
+          <h2 style={{textAlign: 'center'}}>{article.title}</h2>
+          <p style={{textAlign:'center'}}>{article.description}</p>
+        </div>
+      ))}
     </div>
   );
 }
+
+export default App;
